@@ -1,4 +1,4 @@
-TwitterAPI
+TwitStats
 ==========
 
 Helps to display tweets and people who retweeted this with maximum number of times
