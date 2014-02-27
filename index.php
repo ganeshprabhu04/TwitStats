@@ -66,11 +66,11 @@ and open the template in the editor.
             //Including API caller file which has methods for performing various actions
             require('APICaller.php');
             //Below are my credentials for connecting to twitter API
-            $consumer_key = 'WCescztJx0rJQxFYuN6W7A';
-            $consumer_secret = '3j0FEuqamaTImjaAZtbhWTwsgbRu8FTEOBckA';
-            $accesstoken = '89121047-Z2feYUv4ncEpynx7Ip07zxtfOF2kJi5OjWp0VNlNm';
-            $accesstokensecret = 'LA3yMBvdJxnlS6eWt9HfgLaQnK2fk8eTgO9fqlURwG4Xf';
-            $screen_name='narendramodi';
+            $consumer_key = '<Your consumer key>';
+            $consumer_secret = '<Your consumer secret>';
+            $accesstoken = '<Your accesstoken>';
+            $accesstokensecret = '<Your accesstokensecret>';
+            $screen_name='<Twitter user name>';
             
             //Create API caller Object
             $twitterCaller = new APICaller($consumer_key, $consumer_secret, $accesstoken, $accesstokensecret, $screen_name);
