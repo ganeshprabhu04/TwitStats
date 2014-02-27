@@ -72,10 +72,10 @@ and open the template in the editor.
                 require('twitteroauth.php'); // path to twitter oauth library
                 //Below are my credentials for connecting to twitter API
 
-                $consumerkey = 'WCescztJx0rJQxFYuN6W7A';
-                $consumersecret = '3j0FEuqamaTImjaAZtbhWTwsgbRu8FTEOBckA';
-                $accesstoken = '89121047-Z2feYUv4ncEpynx7Ip07zxtfOF2kJi5OjWp0VNlNm';
-                $accesstokensecret = 'LA3yMBvdJxnlS6eWt9HfgLaQnK2fk8eTgO9fqlURwG4Xf';
+                $consumerkey = '<Your Consumer key from Twitter>';
+                $consumersecret = '<Your Consumer secret from Twitter'>;
+                $accesstoken = '<Your access token from Twitter>';
+                $accesstokensecret = '<Your access token Secret from Twitter>';
 
                 //Authentication using OAuth
                 $twitter = new TwitterOAuth($consumerkey, $consumersecret, $accesstoken, $accesstokensecret);
