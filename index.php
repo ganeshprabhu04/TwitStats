@@ -4,7 +4,6 @@ To change this license header, choose License Headers in Project Properties.
 To change this template file, choose Tools | Templates
 and open the template in the editor.
 -->
-<!DOCTYPE HTML>
 
 
 <html>
@@ -59,109 +58,47 @@ and open the template in the editor.
                         <h2>narendramodi</h2>
                     </section>
                 </div>
-             </div>
+            </div>
+
+            <?php
+            
+            
+            //Including API caller file which has methods for performing various actions
+            require('APICaller.php');
+            //Below are my credentials for connecting to twitter API
+            $consumer_key = 'WCescztJx0rJQxFYuN6W7A';
+            $consumer_secret = '3j0FEuqamaTImjaAZtbhWTwsgbRu8FTEOBckA';
+            $accesstoken = '89121047-Z2feYUv4ncEpynx7Ip07zxtfOF2kJi5OjWp0VNlNm';
+            $accesstokensecret = 'LA3yMBvdJxnlS6eWt9HfgLaQnK2fk8eTgO9fqlURwG4Xf';
+            $screen_name='narendramodi';
+            
+            //Create API caller Object
+            $twitterCaller = new APICaller($consumer_key, $consumer_secret, $accesstoken, $accesstokensecret, $screen_name);
+            //Authenticate
+            $twitter=$twitterCaller->authenticate($consumer_key, $consumer_secret, $accesstoken, $accesstokensecret);
+            
+            //User timeline JSON
+            $decode_tweet=$twitterCaller->getUserTimeLineJson($screen_name,$twitter);
+            
+            //Get twitter ID's for JSON
+            $tweet_id=$twitterCaller->getUserTimeLineID($decode_tweet);
+            
+            //Get Twitter tweets
+            $tweet_string=$twitterCaller->getUserTimeLineStatus($decode_tweet);
+            
+            
+            /*
+             * For every tweet, dispaly tweet and get the users and their follower count
+             */
+            for ($tweet_count = 0; $tweet_count < 10; $tweet_count++) {
                 
-                <?php
-                // put your code here
-                /*
-                 * Including OAuth authentication libraries by Abraham: Reference: https://github.com/abraham/twitteroauth 
-                 * 
-                 */
-
-
-                require('twitteroauth.php'); // path to twitter oauth library
-                //Below are my credentials for connecting to twitter API
-
-                $consumerkey = '<Your Consumer key from Twitter>';
-                $consumersecret = '<Your Consumer secret from Twitter'>;
-                $accesstoken = '<Your access token from Twitter>';
-                $accesstokensecret = '<Your access token Secret from Twitter>';
-
-                //Authentication using OAuth
-                $twitter = new TwitterOAuth($consumerkey, $consumersecret, $accesstoken, $accesstokensecret);
-
-                /*
-                  We are requesting twitter for user time line
-                  screen_name is twitter user name of the user whose tweets and re tweets  are being tracked
-                  It retrieves recent 100 tweets for given screen name
-                 */
-
-                $tweets = $twitter->get('https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=narendramodi');
-                // $tweets = file_get_contents("./profile.json");
-                //print_r($tweets);
-
-
-                $decode_tweet = json_decode($tweets, true); //Converting User time line JSON to PHP Array so that it can be easily parsed.
-
-                /*
-                  Iterating the Twitter response and saving the tweet IDs having 100 and above re-tweets.
-                 */
-
-                $tweet_id = array();
-                $tweet_string = array();
-                $saved_tweet_count = 0;
-
-                for ($tweet_count = 0; $tweet_count < count($decode_tweet); $tweet_count++) {
-                    //echo $decode_tweet[$tweet_count]['retweet_count'];
-
-
-                    if (($decode_tweet[$tweet_count]['retweet_count']) >= 100) { //Check if the re tweet count for the tweet is equal or greater than 100
-                        //echo "count".$decode_tweet[$i]['retweet_count'];
-                        $tweet_id[$saved_tweet_count] = $decode_tweet[$tweet_count]['id_str']; //Save the tweet with above 100 re tweets
-                        $tweet_string[$saved_tweet_count] = $decode_tweet[$tweet_count]['text'];
-                        $saved_tweet_count++;
-                    }
-                }
-                //print_r($tweet_id);
-
-                /*
-                  Iterating the tweet ID's to get the re-tweeted user statistics like User name and follower count
-                  Sorting the Users in descending Order of follower count
-                  Finally list top 10 re-tweet users based on follower count
-                 */
-
-                //Displaying only 10 tweets, modify below line for all the tweets
-
-
-                for ($tweet_count = 0; $tweet_count < 10; $tweet_count++) {
-                    /*
-                      By default twitter ID number appears in Exponential form hence converting the number to comma-separated format and then removing comma's using String Replace function.
-                      ex: 4.38334720728772609E+17 to 438,334,720,728,772,609
-                      Then 438,334,720,728,772,609 to 438334720728772609
-                     */
-
-                    $unformatted_tweet_id = $tweet_id[$tweet_count];
-                    $formatted_twitter_id = number_format($unformatted_tweet_id);
-                    $formatted_twitter_id = str_replace(',', '', $formatted_twitter_id);
-
-                    //Get User related Re-tweet data for every tweet
-                    //echo "https://api.twitter.com/1.1/statuses/retweets/".$formatted_twitter_id.".json";
-                    $retweets = $twitter->get("https://api.twitter.com/1.1/statuses/retweets/" . $formatted_twitter_id . ".json");
-                    //$retweets = file_get_contents("./retweet.json");
-                    //print_r($tweets_1);
-
-                    $retweets_followers = array();
-                    $decode_retweet = json_decode($retweets, true);
-
-                    //echo "<div id=\"marketing\" class=\"row\"><div class=\"3u\">
-                    //<section class=\"box\"><p class=\"subtitle\">" . $tweet_string[$tweet_count] . "</p> <ul class=\"style1\">";
-
-                    echo "<div id=\"marketing\" class=\"\"><div class=\"\">
+            
+                echo "<div id=\"marketing\" class=\"\"><div class=\"\">
                     <section class=\"\"><p class=\"subtitle\">" . $tweet_string[$tweet_count] . "</p> <ul class=\"style1\">";
-
-                    for ($i = 0; $i < count($decode_retweet); $i++) {
-                        //echo $decode_retweet[$i]['user']['name'];
-                        //echo $decode_retweet[$i]['user']['followers_count'];
-                        //echo "<br/>";
-                        $a = $decode_retweet[$i]['user']['name'];
-                        $b = $decode_retweet[$i]['user']['followers_count'];
-
-                        $retweets_followers[$a] = $b;
-                    }
-
-                    arsort($retweets_followers);
-                    $k = 0;
-                    foreach ($retweets_followers as $key => $value) {
+                     
+                $retweets_followers=$twitterCaller->displayTweets($tweet_id[$tweet_count],$twitter);
+                $k=0;
+                foreach ($retweets_followers as $key => $value) {
                         //Display only top 10 users
                         if ($k == 10) {
                             break;
@@ -171,9 +108,8 @@ and open the template in the editor.
                         $k++;
                     }
                     echo "</ul></section></div></div>";
-                    
-                }
-                ?>
+            }
+?>
 		<!-- Wrapper Ends Here -->
 
 
@@ -189,3 +125,4 @@ and open the template in the editor.
 		
 </body>
 </html>
+            
